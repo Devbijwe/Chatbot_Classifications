@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <title>Chatbot</title>
+</head>
+
+<body class="bg-gray-100 p-4">
+    <div class="max-w-lg mx-auto bg-white rounded-lg shadow-lg p-6">
+        <h1 class="text-2xl font-bold mb-4">Chatbot</h1>
+        <div class="max-h-96 overflow-y-auto" id="chat">
+            <div class="text-gray-800 p-2 rounded bg-blue-200 mb-2">Hello and welcome! How can I assist you today?</div>
+        </div>
+        <form id="chat-form" class="mt-4 flex">
+            <input id="user-input" type="text" class="w-full rounded-l-lg border p-2" placeholder="Type your message..." />
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-r-lg hover:bg-blue-700">Send</button>
+        </form>
+        <div class="mt-4 text-center">
+            <a href="https://github.com/yourusername/your-repo" class="text-blue-500 hover:underline">GitHub Repository</a>
+        </div>
+    </div>
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#chat-form').submit(function(e) {
+            e.preventDefault();
+            const user_input = $('#user-input').val();
+            if (user_input.trim() === '') {
+                return;
+            }
+
+            // Append user message to the chat
+            appendUserMessage(user_input);
+            $('#user-input').val('');
+
+            // Simulate chatbot typing and respond
+            simulateChatbotTyping('This is a chatbot response. It can be a longer message.');
+        });
+    });
+
+    function appendUserMessage(message) {
+        $('#chat').append('<div class="text-gray-800 p-2 rounded bg-gray-200 text-right mb-2">' + message + '</div>');
+        scrollChatToBottom();
+    }
+
+    function simulateChatbotTyping(response) {
+        appendChatbotMessage('Typing...');
+        setTimeout(function() {
+            $('#chat .text-blue-200:last-child').remove(); // Remove "Typing..." message
+            appendChatbotResponse(response);
+        }, 1500); // Simulated delay of 1.5 seconds
+    }
+
+    function appendChatbotMessage(message) {
+        $('#chat').append('<div class="text-blue-200 p-2 rounded bg-gray-200 text-left mb-2">Typing...</div>');
+        scrollChatToBottom();
+    }
+
+    function appendChatbotResponse(response) {
+        const chatbotResponseElement = $('#chat .text-blue-200:last-child');
+        chatbotResponseElement.html(''); // Clear the "Typing..." message
+        const options = {
+            strings: [response],
+            typeSpeed: 50, // Adjust typing speed as needed
+            showCursor: false,
+        };
+
+        const typed = new Typed(chatbotResponseElement[0], options);
+    }
+
+    function scrollChatToBottom() {
+        $('#chat').scrollTop($('#chat')[0].scrollHeight);
+    }
+</script>
+
+</html>
